@@ -709,7 +709,7 @@ function InferenceContent() {
                                         <span className="text-[var(--foreground-muted)]">TX Hash</span>
                                         {selectedJob.transaction_hash ? (
                                             <a
-                                                href={`https://Shardeum.SHMerscan.io/tx/${selectedJob.transaction_hash}`}
+                                                href={`https://explorer-mezame.shardeum.org/tx/${selectedJob.transaction_hash}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="font-mono text-xs text-[var(--primary-400)] hover:underline flex items-center gap-1"
