@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**A Cross-Chain Ecosystem for Private, Verifiable, and Distributed Machine Learning**
+**A Cross-Chain Ecosystem for Private, Verifiable, and Distributed Machine Learning**<br>
 **UTILIZING THE WASTED GPU RESOURCES IN GAMING PC's AND UNIVERSITY LABS AND MAKING A DECENTRALIZED NETWORK OF SUPERCOMPUTING INFRASTRUCTURE**
 
 [![Shardeum](https://img.shields.io/badge/Chain-Shardeum-00d4aa?style=for-the-badge&logo=shardeum)](https://shardeum.org/)
