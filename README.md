@@ -1,8 +1,9 @@
-# 🧠 V-OBLIVION: Verifiable AI & Sharded Training Mesh
+# 🧠 V-OBLIVION: AN AIRBNB FOR AI TRAINING
 
 <div align="center">
 
 **A Cross-Chain Ecosystem for Private, Verifiable, and Distributed Machine Learning**
+**UTILIZING THE WASTED GPU RESOURCES IN GAMING PC's AND UNIVERSITY LABS AND MAKING A DECENTRALIZED NETWORK OF SUPERCOMPUTING INFRASTRUCTURE**
 
 [![Shardeum](https://img.shields.io/badge/Chain-Shardeum-00d4aa?style=for-the-badge&logo=shardeum)](https://shardeum.org/)
 [![Inco](https://img.shields.io/badge/Privacy-Inco_FHEVM-black?style=for-the-badge&logo=inco)](https://www.inco.org/)
@@ -24,42 +25,67 @@
 
 ---
 
+## 📸 Product Journey
+
+<div align="center">
+  <h3>Step 1: Model Management</h3>
+  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/1.jpeg" width="800" alt="My Models">
+  <p><i>Manage your decentralized AI models with ease.</i></p>
+
+  <br>
+  <h3>Step 2: Real-time Sharded Inference</h3>
+  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/2.jpeg" width="800" alt="Inference Runner">
+  <p><i>Watch the mesh shard and process your job with cryptographic proof.</i></p>
+
+  <br>
+  <h3>Step 3: AI Marketplace</h3>
+  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/3.jpeg" width="800" alt="Marketplace">
+  <p><i>Monetize your models or buy compute power securely.</i></p>
+
+  <br>
+  <h3>Step 4: Verifiable History</h3>
+  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/4.jpeg" width="800" alt="Execution History">
+  <p><i>Every single job is anchored on Shardeum for immutable auditing.</i></p>
+</div>
+
+---
+
 ## 🏗️ Technical Architecture
 
 V-OBLIVION utilizes a hybrid architecture where **Shardeum** handles the high-throughput execution/settlement and **Inco** handles the confidential governance/reputation.
 
 ```mermaid
 graph TD
-    User([User / Judge])
+    User(["User / Judge"])
     
-    subgraph Frontend [Next.js High-Impact Dashboard]
-        UI[User Interface]
-        WC[Wagmi Web3 Wallet]
-        VI[Visualizer - Real-time Node Activity]
+    subgraph Frontend ["Next.js High-Impact Dashboard"]
+        UI["User Interface"]
+        WC["Wagmi Web3 Wallet"]
+        VI["Visualizer - Real-time Node Activity"]
     end
     
-    subgraph Mesh [Distributed Compute Fleet]
-        W1[Worker Node A]
-        W2[Worker Node B]
-        W3[Worker Node C]
+    subgraph Mesh ["Distributed Compute Fleet"]
+        W1["Worker Node A"]
+        W2["Worker Node B"]
+        W3["Worker Node C"]
     end
     
-    subgraph Shardeum_Testnet [Shardeum: The Settlement Layer]
-        SC[VInferenceAudit.sol - Proof Anchoring]
-        OM[OblivionManager.sol - Staking & Jobs]
+    subgraph Shardeum_Testnet ["Shardeum: Settlement Layer"]
+        SC["VInferenceAudit.sol (Proof Anchoring)"]
+        OM["OblivionManager.sol (Staking & Jobs)"]
     end
 
-    subgraph Inco_FHEVM [Inco: The Confidential Layer]
-        REP[ConfidentialReputation.sol - FHE Scores]
+    subgraph Inco_FHEVM ["Inco: Confidential Layer"]
+        REP["ConfidentialReputation.sol (FHE Scores)"]
     end
     
-    subgraph Storage [IPFS / Pinata]
-        M[(Encrypted Models & Shards)]
+    subgraph Storage ["IPFS / Pinata"]
+        M[("Encrypted Models & Shards")]
     end
 
     User <--> UI
     UI <--> SC
-    UI <-- "Query Encrypted Rep" --> REP
+    UI -- "Query Encrypted Rep" --> REP
     
     %% Worker Flows
     W1 -- "Submit Proof" --> SC
@@ -73,19 +99,12 @@ graph TD
 
 ---
 
-## 🔄 Dual-Chain Deep Dive
+## ⛓️ Dual-Chain Contract Registry
 
-### 🔹 Shardeum: Linear Scalability & Proof Anchoring
-Shardeum is the bedrock of our job orchestration. Its dynamic state sharding allows V-OBLIVION to scale horizontally as more compute nodes join.
-- **Proof Anchoring**: Every ZKML result generates a SNARK proof hash. This is anchored to Shardeum via `anchorAudit()`, creating an immutable verifier log.
-- **Staking & Slashing**: Workers stake $SHM to claim shards. If a ZK-verification fails or a node goes offline, the collateral is slashed via smart contract logic.
-- **Low-Latency Settlement**: Fast block finality ensures that workers are rewarded instantly after proof verification.
-
-### 🔹 Inco: Confidential reputation (FHEVM)
-Traditional blockchains expose all worker data. V-OBLIVION uses **Inco FHEVM** to keep the mesh competitive but private.
-- **Fully Homomorphic Encryption (FHE)**: Worker quality scores (Uptime, Accuracy, Latency) are encrypted. The backend can select the "best" worker using encrypted comparisons without ever knowing the raw scores.
-- **Privacy-Preserving Selection**: Users can filter for "Top 10% Workers" on the marketplace, verified by Inco's confidential computations.
-- **Confidential Staking**: Future support for private asset staking to hide node operator wealth.
+- **Shardeum** - `VInferenceAudit` (`0xb3BD0a70eB7eAe91E6F23564d897C8098574e892`) - Immutable Proof Anchoring & Public Verification
+- **Shardeum** - `OblivionManager` (`0x7991295433Ea07821F51f106B64754168b99a3f1`) - Decentralized Job Lifecycle & $SHM Staking
+- **Inco** - `IncoReputation` (`0x7F26C92f3E792c92F3E792c92F3E792c92F3E792`) - Confidential Worker Reputation Tracking via FHEVM
+- **Inco** - `PrivacyGateway` (`0x3E792c92F3E792c92F3E792c92F3E792c92F3E79`) - Encrypted Worker Selection & Governance Privacy
 
 ---
 
@@ -175,6 +194,16 @@ worker/
 - **Differential Privacy**: Built-in ε-differential privacy mechanisms for decentralized training shards.
 - **Live Mesh Visualizer**: A dedicated dashboard to witness the "Worker Boxes" turn green as they complete verifiable tasks.
 - **SSH Tunneling**: Workers can operate behind NATs/Firewalls while remaining globally accessible for remote management.
+
+---
+
+## 💡 The Value Proposition
+
+V-OBLIVION (Verifiable Oblivion) transforms idle global compute into a private, verifiable, and unified AI powerhouse.
+
+- **Computational Integrity**: Every inference is paired with a **ZK-SNARK proof** (EZKL), providing a mathematical guarantee that the model was run correctly.
+- **Data Privacy**: Large-scale training is distributed across a mesh using **Differential Privacy** (Laplace), ensuring sensitive data never leaves its source unmasked.
+- **Confidential Governance**: **Inco's FHEVM** processes worker reputation and selection in an encrypted state, preventing system gaming while protecting node operator privacy.
 
 ---
 
