@@ -2,9 +2,10 @@
 
 <div align="center">
 
-**Verifiable AI Inference + Sharded ML Training Marketplace on Shardeum**
+**Verifiable AI Inference + Sharded ML Training Marketplace on Shardeum & Inco**
 
-[![Shardeum](https://img.shields.io/badge/Shardeum-8119-00d4aa?style=for-the-badge)](https://shardeum.org/)
+[![Shardeum](https://img.shields.io/badge/Shardeum-Mezame-00d4aa?style=for-the-badge)](https://shardeum.org/)
+[![Inco](https://img.shields.io/badge/Inco-FHEVM-black?style=for-the-badge)](https://www.inco.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688?style=for-the-badge)](https://fastapi.tiangolo.com/)
 [![ZKML](https://img.shields.io/badge/ZKML-EZKL-6366f1?style=for-the-badge)]()
@@ -15,12 +16,12 @@
 
 ## 🌟 Overview
 
-**V-OBLIVION** is a decentralized ecosystem for verifiable AI. It solves the "black box" problem of AI by wrapping inference in Zero-Knowledge Proofs (ZKML) and distributing heavy ML training jobs across a sharded mesh of worker nodes.
+**V-OBLIVION** is a decentralized ecosystem for verifiable AI, built on a cross-chain architecture leveraging **Shardeum** for high-speed job orchestration and **Inco (FHEVM)** for privacy-preserving reputation management.
 
 - **🤖 Verifiable Inference**: Run AI models (Scikit-Learn, ONNX, Transformers) with cryptographic proof of correct execution.
 - **🏋️ Sharded ML Training**: High-performance training jobs broken into shards and processed by a global compute fleet.
-- **🛒 AI Marketplace**: A decentralized hub where developers list models and users buy inference access with ETH/SHM escrow.
-- **⛓️ Shardeum Integration**: All proofs and events are anchored on the Shardeum EVM testnet for immutable auditing.
+- **�️ Confidential Reputation (Inco)**: Worker performance and reputation are managed via Fully Homomorphic Encryption (FHE) on Inco, ensuring worker privacy while maintaining network quality.
+- **⛓️ Proof Anchoring (Shardeum)**: All ZKML proofs are anchored to Shardeum for immutable, low-cost auditing.
 
 ---
 
@@ -45,11 +46,15 @@ graph TD
     subgraph Mesh [Decentralized Mesh]
         W1[Worker Node A]
         W2[Worker Node B]
-        W3[Worker Node C]
     end
     
-    subgraph Blockchain [Shardeum EVM]
+    subgraph Blockchain_Shardeum [Shardeum EVM]
         SC[VInferenceAudit Contract]
+        OM[OblivionManager - Staking]
+    end
+
+    subgraph Blockchain_Inco [Inco FHEVM]
+        REP[Confidential Reputation Contract]
     end
     
     subgraph Storage [IPFS / Pinata]
@@ -59,39 +64,35 @@ graph TD
     User <--> UI
     UI <--> API
     API <--> DB
+    
+    %% Shardeum Roles
     API <--> SC
     W1 <--> SC
-    W1 <--> API
-    W1 <--> M
+    W1 <--> OM
+    
+    %% Inco Roles
+    W1 <--> REP
+    API <--> REP
+    
+    %% Logic
     API <--> EZ
     EZ <--> M
+    W1 <--> M
 ```
 
 ---
 
-## 🔄 Core Workflows
+## 🔄 Dual-Chain Strategy
 
-### 1. Verifiable AI Inference Flow
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as Frontend
-    participant B as Backend (Orchestrator)
-    participant W as Worker Mesh
-    participant S as Shardeum Blockchain
+### 1. Shardeum: The Execution Engine
+- **Scalability**: Handles the high-frequency job submissions and worker heartbeat events.
+- **Anchoring**: Stores the `bytes32` hashes of ZKML proofs in the `VInferenceAudit` contract.
+- **Economy**: Manages $SHM rewards, staking, and escrowed marketplace payments.
 
-    U->>F: Submit Inference Request
-    F->>B: Post Job Data
-    B->>B: Shard Job Task
-    B->>W: Assign Task Shards
-    W->>W: Run Model Inference
-    W->>W: Generate ZKML Proof (EZKL)
-    W-->>B: Return Shard Result & Proof
-    B->>S: Anchor Proof Hash
-    S-->>B: TX Confirmed
-    B-->>F: Final Result + Verified Proof
-    F-->>U: Display Verified Output
-```
+### 2. Inco: The Privacy Layer
+- **FHEVM Integration**: Uses Inco's Fully Homomorphic Encryption to store worker quality scores.
+- **Confidential Selection**: Backend queries Inco to select workers based on encrypted reputation without revealing individual performance data to the entire mesh.
+- **Privacy-First Quality**: `IncoReputation.sol` ensures that only authorized validators can update or view sensitive worker metrics.
 
 ---
 
@@ -101,70 +102,26 @@ sequenceDiagram
 - `backend/`: FastAPI Backend & Orchestration Layer
 - `frontend/`: Next.js 15 Frontend (App Router)
 - `worker/`: Decentralized Worker Node implementation
-- `contracts/`: Solidity Smart Contracts (Shardeum)
-- `deploy/`: Automation scripts for mesh deployment
-
-### 🐍 Backend (`/backend`)
-- `app/api/`: REST endpoints for `inference`, `models`, `marketplace`, and `workers`.
-- `app/core/`: Core logic including `blockchain.py` (Web3), `database.py` (JSON proxy), and `config.py`.
-- `app/services/`: Specialized services like `zkml_simulator.py` and `ezkl_service.py`.
-- `storage/`: Local persistence for `jobs.json`, `models.json`, and worker telemetry.
-
-### ⚛️ Frontend (`/frontend`)
-- `src/app/dashboard/`: Main application views (Inference, Training, Workers, Marketplace).
-- `src/app/visualizer/`: High-impact REAL-TIME mesh activity dashboard for judges.
-- `src/components/`: Reusable UI components (JobCards, ProofVerifiers, Web3Providers).
-- `src/lib/`: API client and Wagmi/W3 configuration.
+- `contracts/`: Solidity Smart Contracts for **Shardeum** and **Inco**.
 
 ### ⚙️ Worker Node (`/worker`)
-- `decentralized_worker.py`: The heart of the node. Manages job polling, execution, and tunneling.
-- `blockchain_client.py`: Handles on-chain staking, job claiming, and reputation via Shardeum.
-- `zk_proofs.py`: Real EZKL integration for generating SNARK proofs of ML computation.
-- `privacy.py`: Implements Differential Privacy (Laplace mechanism) for training data.
+- `blockchain_client.py`: Multi-chain client interacting with both Shardeum (EVM) and Inco (FHEVM).
+- `zk_proofs.py`: EZKL integration for generating SNARK proofs of ML computation.
+- `privacy.py`: Differential Privacy (Laplace mechanism) for training data.
+- `quality_verification.py`: Computes encrypted metrics to be sent to Inco.
 
 ---
 
-## �️ Setup & Deployment
+## 🔗 Smart Contract Registry
 
-### 1. Prerequisites
-- **Node.js**: `v18+`
-- **Python**: `3.10+`
-- **Wallet**: MetaMask with Shardeum Mezame Testnet SHM.
-
-### 2. Launch Backend
-```bash
-cd backend
-pip install -r requirements.txt
-python main.py
-```
-
-### 3. Launch Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### 4. Start a Worker Node
-```bash
-cd worker
-pip install -r requirements.txt
-# Configure .env with per-node PRIVATE_KEY
-python decentralized_worker.py
-```
-
----
-
-## 🔗 Smart Contract Registry (Shardeum)
-
-| Contract | Purpose | Address |
-|----------|---------|---------|
-| **VInferenceAudit** | Proof Anchoring & Verification | `0xb3BD0a70eB7eAe91E6F23564d897C8098574e892` |
-| **MockUSDC** | Marketplace Escrow Token | `0x0117A0EcF95dE28CCc0486D45D5362e020434575` |
-| **OblivionManager** | Job Lifecycle & Staking | `0x7991295433Ea07821F51f106B64754168b99a3f1` |
+| Chain | Contract | Purpose | Address |
+|-------|----------|---------|---------|
+| **Shardeum** | `VInferenceAudit` | Proof Anchoring | `0xb3BD0a70eB7eAe91E6F23564d897C8098574e892` |
+| **Shardeum** | `OblivionManager` | Staking & Job Lifecycle | `0x7991295433Ea07821F51f106B64754168b99a3f1` |
+| **Inco** | `IncoReputation` | Confidential Worker Scores | `0x... (Deployed on FHEVM)` |
 
 ---
 
 <div align="center">
-Built for the Shardeum Ecosystem | Distributed AI | Verifiable ML
+Built for Shardeum & Inco | Verifiable & Private AI
 </div>
