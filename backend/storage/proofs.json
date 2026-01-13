@@ -584,5 +584,87 @@
       "chain_id": 11155111
     },
     "id": "3df69d21-e528-4350-95fd-0dc82759d576"
+  },
+  {
+    "job_id": "03afd9d1-dcc0-4626-ad09-0315be310b8d",
+    "proof_hash": "0x917eba5ea2541e1a7eaac7bc8add494a6e84afbfc8941664641f86d03a0c5ff8",
+    "proof_bytes32": "0x917eba5ea2541e1a7eaac7bc8add494a6e84afbfc8941664641f86d03a0c5ff8",
+    "proof_version": "zkml-v1.0",
+    "model_version": "v-inference-v1.0.0",
+    "model_id": "model-fraud-detection-v2",
+    "timestamp": "2026-01-13T05:40:15.177998Z",
+    "components": {
+      "input_hash": "0x9b5247d6bbeb781fc38de7bf359964829110e00a33e4e014c033fdc8f8df2eb1",
+      "computation_hash": "0xbd23f8c935aa4e7dd9b21c166bafadc2cb64e3b5e8602e58f4da20028b1d17f5",
+      "model_hash": "0xc343dc4be045f4b640868a3a519dc55d0c3bce313d7f48aa3ce94bc0d3f96077"
+    },
+    "attestations": {
+      "computation_valid": true,
+      "model_version_verified": true,
+      "input_integrity_verified": true,
+      "output_deterministic": true
+    },
+    "circuit_info": {
+      "name": "v-inference-zkml-circuit",
+      "type": "groth16",
+      "curve": "bn254",
+      "constraints": 15467,
+      "proving_time_ms": 0.93
+    },
+    "generated_at": "2026-01-13T05:40:30.521214",
+    "on_chain": {
+      "anchored": true,
+      "transaction_hash": "0x4d7662ea95628bdd93194e0bdf74ecf9258a7e9d3dd35d2400cd846f17e93a60",
+      "block_number": 3658969,
+      "gas_used": 283301,
+      "gas_cost_eth": null,
+      "gas_cost_usd": null,
+      "explorer_url": "https://explorer-mezame.shardeum.org/tx/0x4d7662ea95628bdd93194e0bdf74ecf9258a7e9d3dd35d2400cd846f17e93a60",
+      "contract_address": "0xb3BD0a70eB7eAe91E6F23564d897C8098574e892",
+      "chain": "Shardeum",
+      "chain_id": 11155111
+    },
+    "id": "cd06f996-4a46-4724-8412-f180800584a2"
+  },
+  {
+    "job_id": "f177b643-80e3-4c59-9ee1-08cb7d3bad26",
+    "proof_hash": "0xd1f7d6c0dce53e2c2c8a07c82ae35d244194943ef703e08caf358389bc3aebbd",
+    "proof_bytes32": "0xd1f7d6c0dce53e2c2c8a07c82ae35d244194943ef703e08caf358389bc3aebbd",
+    "proof_version": "zkml-v1.0",
+    "model_version": "v-inference-v1.0.0",
+    "model_id": "model-fraud-detection-v2",
+    "timestamp": "2026-01-13T05:43:26.733472Z",
+    "components": {
+      "input_hash": "0x9b5247d6bbeb781fc38de7bf359964829110e00a33e4e014c033fdc8f8df2eb1",
+      "computation_hash": "0xbd23f8c935aa4e7dd9b21c166bafadc2cb64e3b5e8602e58f4da20028b1d17f5",
+      "model_hash": "0xc343dc4be045f4b640868a3a519dc55d0c3bce313d7f48aa3ce94bc0d3f96077"
+    },
+    "attestations": {
+      "computation_valid": true,
+      "model_version_verified": true,
+      "input_integrity_verified": true,
+      "output_deterministic": true
+    },
+    "circuit_info": {
+      "name": "v-inference-zkml-circuit",
+      "type": "groth16",
+      "curve": "bn254",
+      "constraints": 15626,
+      "proving_time_ms": 0.0
+    },
+    "generated_at": "2026-01-13T05:43:36.282411",
+    "on_chain": {
+      "anchored": true,
+      "transaction_hash": "0x80f5366a4008eb8438b101de705759b74e1f784fc62a17a66d1099731e7897f2",
+      "block_number": 3659004,
+      "gas_used": 283301,
+      "gas_cost_eth": null,
+      "gas_cost_usd": null,
+      "explorer_url": "https://explorer-mezame.shardeum.org/tx/0x80f5366a4008eb8438b101de705759b74e1f784fc62a17a66d1099731e7897f2",
+      "contract_address": "0xb3BD0a70eB7eAe91E6F23564d897C8098574e892",
+      "chain": "Shardeum",
+      "chain_id": 11155111
+    },
+    "id": "299fe7f6-abb3-4ee2-a304-658a72c3ebb8"
   }
 ]

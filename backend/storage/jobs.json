@@ -3051,5 +3051,123 @@
     "verification_status": "Proof verified on-chain OK",
     "transaction_hash": "0x655dfc867cf4552c4bb09d6674b1fb4a2d7fd81a0da19904fd9cd1cc4fd7672c",
     "block_number": 3658933
+  },
+  {
+    "model_id": "model-fraud-detection-v2",
+    "user_id": "demo_user",
+    "input_data": {
+      "features": [
+        0.5,
+        0.8,
+        0.3,
+        0.7,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.5,
+        0.3,
+        0.7,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.5,
+        0.3,
+        0.7,
+        0.5,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.3
+      ]
+    },
+    "use_zkml": true,
+    "id": "03afd9d1-dcc0-4626-ad09-0315be310b8d",
+    "created_at": "2026-01-13T05:40:14.948721",
+    "status": "completed",
+    "output_data": {
+      "prediction": "class_0",
+      "predicted_class_index": 0,
+      "confidence": 0.54,
+      "real_inference": true,
+      "model_file": "fraud_detection_v2.pkl",
+      "class_probabilities": {
+        "class_0": 0.54,
+        "class_1": 0.46
+      }
+    },
+    "completed_at": "2026-01-13T05:40:30.470390",
+    "latency_ms": 15384.43,
+    "proof_hash": "0x917eba5ea2541e1a7eaac7bc8add494a6e84afbfc8941664641f86d03a0c5ff8",
+    "verification_status": "Proof verified on-chain OK",
+    "transaction_hash": "0x4d7662ea95628bdd93194e0bdf74ecf9258a7e9d3dd35d2400cd846f17e93a60",
+    "block_number": 3658969
+  },
+  {
+    "model_id": "model-fraud-detection-v2",
+    "user_id": "demo_user",
+    "input_data": {
+      "features": [
+        0.5,
+        0.8,
+        0.3,
+        0.7,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.5,
+        0.3,
+        0.7,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.5,
+        0.3,
+        0.7,
+        0.5,
+        0.2,
+        0.9,
+        0.4,
+        0.6,
+        0.1,
+        0.8,
+        0.3
+      ]
+    },
+    "use_zkml": true,
+    "id": "f177b643-80e3-4c59-9ee1-08cb7d3bad26",
+    "created_at": "2026-01-13T05:43:26.669265",
+    "status": "completed",
+    "output_data": {
+      "prediction": "class_0",
+      "predicted_class_index": 0,
+      "confidence": 0.54,
+      "real_inference": true,
+      "model_file": "fraud_detection_v2.pkl",
+      "class_probabilities": {
+        "class_0": 0.54,
+        "class_1": 0.46
+      }
+    },
+    "completed_at": "2026-01-13T05:43:36.232227",
+    "latency_ms": 9514.39,
+    "proof_hash": "0xd1f7d6c0dce53e2c2c8a07c82ae35d244194943ef703e08caf358389bc3aebbd",
+    "verification_status": "Proof verified on-chain OK",
+    "transaction_hash": "0x80f5366a4008eb8438b101de705759b74e1f784fc62a17a66d1099731e7897f2",
+    "block_number": 3659004
   }
 ]

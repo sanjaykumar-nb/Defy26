@@ -11,8 +11,8 @@
       "features": 30,
       "file": "fraud_detection_v2.pkl"
     },
-    "total_inferences": 9,
-    "average_latency_ms": 7876.08,
+    "total_inferences": 11,
+    "average_latency_ms": 8707.59,
     "created_at": "2026-01-08T00:00:00Z"
   },
   {
