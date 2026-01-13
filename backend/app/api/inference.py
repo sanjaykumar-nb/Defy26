@@ -90,7 +90,7 @@ async def run_inference(request: InferenceInput):
                         },
                         "verification": {
                             "is_valid": False,
-                            "message": "❌ NOT VERIFIED - Computation failed integrity check",
+                            "message": "ERROR NOT VERIFIED - Computation failed integrity check",
                             "gas_estimate": {"cost_usd": 0, "chain": "Shardeum"}
                         }
                     }

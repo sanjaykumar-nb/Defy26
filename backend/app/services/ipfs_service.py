@@ -181,14 +181,14 @@ class IPFSService:
                             }
                         else:
                             error = await response.text()
-                            print(f"❌ Pinata upload failed: {error}")
+                            print(f"FAIL Pinata upload failed: {error}")
                             return {
                                 "success": False,
                                 "error": f"Pinata upload failed: {error}"
                             }
                             
         except Exception as e:
-            print(f"❌ Pinata upload error: {e}")
+            print(f"FAIL Pinata upload error: {e}")
             return {
                 "success": False,
                 "error": str(e)
@@ -280,7 +280,7 @@ class IPFSService:
                             }
                             
         except aiohttp.ClientConnectorError:
-            print("⚠️ Local IPFS node not running, using simulation mode")
+            print("WARN Local IPFS node not running, using simulation mode")
             # Fall back to simulation
             cid = self.generate_local_cid(file_path)
             return {

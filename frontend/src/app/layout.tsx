@@ -30,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} antialiased grid-pattern`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${inter.variable} antialiased grid-pattern`} suppressHydrationWarning>
         <Web3Provider>{children}</Web3Provider>
       </body>
     </html>

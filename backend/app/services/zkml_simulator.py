@@ -54,7 +54,7 @@ try:
     NUMPY_AVAILABLE = True
 except ImportError:
     NUMPY_AVAILABLE = False
-    print("⚠️ NumPy not installed - Limited array support")
+    print("WARN NumPy not installed - Limited array support")
 
 # Try to import onnxruntime for ONNX inference
 try:
@@ -305,7 +305,7 @@ class ZKProofGenerator:
                 }
                 
                 if chain_matches:
-                    return True, "Proof verified on-chain ✓", verification_details
+                    return True, "Proof verified on-chain OK", verification_details
                 else:
                     return False, "On-chain hash mismatch", verification_details
         

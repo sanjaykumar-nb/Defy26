@@ -75,6 +75,7 @@ const navItems = [
     { href: "/dashboard/training", icon: BrainIcon, label: "Training Jobs" },
     { href: "/dashboard/workers", icon: ServerIcon, label: "Workers" },
     { href: "/dashboard/marketplace", icon: ShopIcon, label: "Marketplace" },
+    { href: "/worker-hub", icon: BoltIcon, label: "Worker Portal" },
 ];
 
 function WalletButton() {

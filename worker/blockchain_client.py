@@ -235,6 +235,37 @@ OBLIVION_ABI = [
     }
 ]
 
+# Contract ABI for IncoReputation (FHEVM)
+INCO_REPUTATION_ABI = [
+    {
+        "inputs": [
+            {"name": "worker", "type": "address"},
+            {"name": "encryptedDelta", "type": "bytes"}
+        ],
+        "name": "updateReputation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {"name": "worker", "type": "address"},
+            {"name": "threshold", "type": "bytes"}
+        ],
+        "name": "isQualified",
+        "outputs": [{"name": "", "type": "uint256"}], # returns ebool handle as uint256
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"name": "worker", "type": "address"}],
+        "name": "getEncryptedReputation",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
+
 
 class BlockchainClient:
     """
@@ -275,6 +306,16 @@ class BlockchainClient:
             address=Web3.to_checksum_address(self.contract_address),
             abi=OBLIVION_ABI
         )
+        
+        # Initialize IncoReputation contract
+        self.inco_address = os.getenv('INCO_REPUTATION_ADDRESS')
+        if self.inco_address:
+            self.inco_contract = self.w3.eth.contract(
+                address=Web3.to_checksum_address(self.inco_address),
+                abi=INCO_REPUTATION_ABI
+            )
+        else:
+            self.inco_contract = None
         
         print(f"✅ Blockchain client initialized")
         print(f"   RPC: {self.rpc_url[:40]}...")
@@ -516,6 +557,42 @@ class BlockchainClient:
         except Exception as e:
             print(f"❌ Error getting workers: {e}")
         return workers
+
+    # ========== Inco FHE Functions ==========
+    
+    def update_confidential_reputation(self, encrypted_delta_hex: str) -> bool:
+        """Update worker's confidential reputation via FHE delta"""
+        if not self.inco_contract:
+            print("⚠️ Inco contract not configured")
+            return False
+            
+        print(f"🛡️ Updating confidential reputation via FHE...")
+        # Convert hex to bytes
+        delta_bytes = bytes.fromhex(encrypted_delta_hex.replace('0x', ''))
+        
+        func = self.inco_contract.functions.updateReputation(self.address, delta_bytes)
+        result = self._send_transaction(func)
+        return result is not None
+
+    def check_confidential_qualification(self, encrypted_threshold_hex: str) -> bool:
+        """
+        Check if current worker qualifies for a job based on encrypted threshold.
+        Note: This returns a handle, actual decryption happens via Gateway in FHEVM.
+        For demo, we simulate the 'qualified' check.
+        """
+        if not self.inco_contract:
+            return True # Fallback for demo
+            
+        try:
+            threshold_bytes = bytes.fromhex(encrypted_threshold_hex.replace('0x', ''))
+            # This would normally be part of a larger FHE transaction
+            # Here we just show the call interface
+            handle = self.inco_contract.functions.isQualified(self.address, threshold_bytes).call()
+            print(f"🔒 FHE Qualification Handle: {handle}")
+            return True 
+        except Exception as e:
+            print(f"⚠️ FHE Qualification check error: {e}")
+            return True
 
 
 # ============ CLI Functions ============

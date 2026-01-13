@@ -30,7 +30,7 @@ class BlockchainService:
     """
     
     def __init__(self):
-        self.w3 = Web3(Web3.HTTPProvider(SHARDEUM_RPC_URL))
+        self.w3 = Web3(Web3.HTTPProvider(SHARDEUM_RPC_URL, request_kwargs={'timeout': 10}))
         self.chain_id = CHAIN_ID
         self.chain_name = CHAIN_NAME
         self.contract_address = CONTRACT_ADDRESS
@@ -43,27 +43,34 @@ class BlockchainService:
     
     def _init_connection(self):
         """Initialize Web3 connection and contract"""
-        if self.w3.is_connected():
-            self.connected = True
-            print(f"[SUCCESS] Connected to {self.chain_name} (Chain ID: {self.chain_id})")
-            
-            # Initialize contract
-            if self.contract_address:
-                self.contract = self.w3.eth.contract(
-                    address=Web3.to_checksum_address(self.contract_address),
-                    abi=CONTRACT_ABI
-                )
-            
-            # Initialize account if private key available
-            if PRIVATE_KEY:
-                self.account = self.w3.eth.account.from_key(PRIVATE_KEY)
-                print(f"[INFO] Using account: {self.account.address}")
+        try:
+            if self.w3.is_connected():
+                self.connected = True
+                print(f"[SUCCESS] Connected to {self.chain_name} (Chain ID: {self.chain_id})")
                 
-                # Show balance
-                balance = self.get_balance()
-                print(f"[INFO] Account balance: {balance:.4f} SHM")
-        else:
-            print(f"[ERROR] Failed to connect to {self.chain_name}")
+                # Initialize contract
+                if self.contract_address:
+                    self.contract = self.w3.eth.contract(
+                        address=Web3.to_checksum_address(self.contract_address),
+                        abi=CONTRACT_ABI
+                    )
+                
+                # Initialize account if private key available
+                if PRIVATE_KEY:
+                    self.account = self.w3.eth.account.from_key(PRIVATE_KEY)
+                    print(f"[INFO] Using account: {self.account.address}")
+                    
+                    # Show balance (non-blocking simulation if it takes too long)
+                    try:
+                        balance = self.get_balance()
+                        print(f"[INFO] Account balance: {balance:.4f} SHM")
+                    except:
+                        print(f"[WARNING] Could not fetch balance, but connected.")
+            else:
+                print(f"[ERROR] Failed to connect to {self.chain_name}")
+                self.connected = False
+        except Exception as e:
+            print(f"[ERROR] Blockchain connection error: {e}")
             self.connected = False
     
     def get_balance(self) -> float:

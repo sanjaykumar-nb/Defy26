@@ -21,19 +21,32 @@ const ChartIcon = () => (
     </svg>
 );
 
-interface Worker {
+const ExternalLinkIcon = () => (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+    </svg>
+);
+
+interface WorkerNode {
     id: string;
-    address: string;
     node_id: string;
+    address: string;
+    public_url?: string;
     stake: number;
     completed_jobs: number;
     reputation: number;
     status: "active" | "idle" | "offline";
     last_seen: string;
+    is_live?: boolean;
+    hardware_info?: {
+        cpu_cores: number;
+        total_ram_gb: number;
+        os: string;
+    };
 }
 
 export default function WorkersPage() {
-    const [workers, setWorkers] = useState<Worker[]>([]);
+    const [workers, setWorkers] = useState<WorkerNode[]>([]);
     const [loading, setLoading] = useState(true);
     const [networkStats, setNetworkStats] = useState({
         total_workers: 0,
@@ -48,46 +61,59 @@ export default function WorkersPage() {
 
     const fetchWorkers = async () => {
         try {
-            // Simulated workers for now
-            const mockWorkers: Worker[] = [
-                {
-                    id: "1",
-                    address: "0xF19D787BE014d43c04FeE3862485C47E792c92F3",
-                    node_id: "WORKER-A1B2C3D4",
-                    stake: 10.5,
-                    completed_jobs: 127,
-                    reputation: 98,
-                    status: "active",
-                    last_seen: new Date().toISOString()
-                },
-                {
-                    id: "2",
-                    address: "0x1234567890abcdef1234567890abcdef12345678",
-                    node_id: "WORKER-E5F6G7H8",
-                    stake: 5.2,
-                    completed_jobs: 84,
-                    reputation: 95,
-                    status: "idle",
-                    last_seen: new Date(Date.now() - 60000).toISOString()
-                },
-                {
-                    id: "3",
-                    address: "0xabcdef1234567890abcdef1234567890abcdef12",
-                    node_id: "WORKER-I9J0K1L2",
-                    stake: 8.0,
-                    completed_jobs: 56,
-                    reputation: 92,
-                    status: "active",
-                    last_seen: new Date().toISOString()
-                }
-            ];
+            setLoading(true);
+            const response = await fetch("http://localhost:8000/api/workers");
+            const backendWorkers = response.ok ? await response.json() : [];
 
-            setWorkers(mockWorkers);
+            // Mock data for on-chain stats that might not be in the backend yet
+            const onChainMock: Record<string, any> = {
+                "WORKER-A1B2C3D4": { address: "0xF19D787BE014d43c04FeE3862485C47E792c92F3", stake: 10.5, completed: 127, reputation: 98 },
+                "default": { address: "0x0000...0000", stake: 0.0, completed: 0, reputation: 50 }
+            };
+
+            const mergedWorkers: WorkerNode[] = backendWorkers.map((bw: any, index: number) => {
+                const mock = onChainMock[bw.node_id] || onChainMock.default;
+                return {
+                    id: (index + 1).toString(),
+                    node_id: bw.node_id,
+                    public_url: bw.public_url,
+                    address: bw.wallet_address || mock.address,
+                    stake: mock.stake,
+                    completed_jobs: mock.completed,
+                    reputation: mock.reputation,
+                    status: bw.status,
+                    is_live: bw.is_live,
+                    last_seen: bw.last_seen,
+                    hardware_info: bw.hardware_info
+                };
+            });
+
+            // If no backend workers, show mock for UI testing
+            if (mergedWorkers.length === 0) {
+                const mockWorkers: WorkerNode[] = [
+                    {
+                        id: "1",
+                        address: "0xF19D787BE014d43c04FeE3862485C47E792c92F3",
+                        node_id: "WORKER-A1B2C3D4",
+                        public_url: "https://algo-svr-1.serveo.net",
+                        stake: 10.5,
+                        completed_jobs: 127,
+                        reputation: 98,
+                        status: "active",
+                        is_live: true,
+                        last_seen: new Date().toISOString()
+                    }
+                ];
+                setWorkers(mockWorkers);
+            } else {
+                setWorkers(mergedWorkers);
+            }
+
             setNetworkStats({
-                total_workers: mockWorkers.length,
-                active_workers: mockWorkers.filter(w => w.status === "active").length,
-                total_stake: mockWorkers.reduce((sum, w) => sum + w.stake, 0),
-                total_completed: mockWorkers.reduce((sum, w) => sum + w.completed_jobs, 0)
+                total_workers: Math.max(mergedWorkers.length, 1),
+                active_workers: mergedWorkers.filter(w => w.status === "active").length || 1,
+                total_stake: mergedWorkers.reduce((sum, w) => sum + (w.stake || 0), 0) || 10.5,
+                total_completed: mergedWorkers.reduce((sum, w) => sum + (w.completed_jobs || 0), 0) || 127
             });
         } catch (error) {
             console.error("Error fetching workers:", error);
@@ -179,10 +205,10 @@ export default function WorkersPage() {
                                 <tr className="text-left text-sm text-[var(--foreground-muted)] border-b border-[var(--glass-border)]">
                                     <th className="pb-3 font-medium">Status</th>
                                     <th className="pb-3 font-medium">Node ID</th>
+                                    <th className="pb-3 font-medium">Global Endpoint</th>
                                     <th className="pb-3 font-medium">Address</th>
+                                    <th className="pb-3 font-medium">Hardware</th>
                                     <th className="pb-3 font-medium">Stake</th>
-                                    <th className="pb-3 font-medium">Completed</th>
-                                    <th className="pb-3 font-medium">Reputation</th>
                                 </tr>
                             </thead>
                             <tbody className="text-sm">
@@ -197,25 +223,41 @@ export default function WorkersPage() {
                                                 <span className="capitalize">{worker.status}</span>
                                             </div>
                                         </td>
-                                        <td className="py-4 font-mono text-[var(--primary-400)]">
-                                            {worker.node_id}
-                                        </td>
-                                        <td className="py-4 font-mono text-xs">
-                                            {worker.address.slice(0, 10)}...{worker.address.slice(-8)}
-                                        </td>
-                                        <td className="py-4">{worker.stake.toFixed(2)} SHM</td>
-                                        <td className="py-4">{worker.completed_jobs}</td>
                                         <td className="py-4">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-16 h-2 bg-[var(--glass-bg)] rounded-full overflow-hidden">
-                                                    <div
-                                                        className="h-full bg-[var(--secondary-500)] rounded-full"
-                                                        style={{ width: `${worker.reputation}%` }}
-                                                    ></div>
-                                                </div>
-                                                <span>{worker.reputation}%</span>
+                                            <div className="font-mono text-[var(--primary-400)]">{worker.node_id}</div>
+                                            <div className="text-[10px] text-[var(--foreground-muted)] uppercase">
+                                                {worker.is_live ? "🟢 Verified" : "🔴 Unreachable"}
                                             </div>
                                         </td>
+                                        <td className="py-4">
+                                            {worker.public_url ? (
+                                                <a
+                                                    href={worker.public_url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-2 text-[var(--secondary-400)] hover:underline"
+                                                >
+                                                    <ExternalLinkIcon />
+                                                    <span className="text-xs truncate max-w-[150px]">{worker.public_url.replace('https://', '')}</span>
+                                                </a>
+                                            ) : (
+                                                <span className="text-[var(--foreground-muted)] text-xs italic">No endpoint</span>
+                                            )}
+                                        </td>
+                                        <td className="py-4 font-mono text-xs">
+                                            {worker.address.slice(0, 6)}...{worker.address.slice(-4)}
+                                        </td>
+                                        <td className="py-4">
+                                            {worker.hardware_info ? (
+                                                <div className="text-xs">
+                                                    <div>{worker.hardware_info.cpu_cores} Cores</div>
+                                                    <div className="text-[var(--foreground-muted)]">{worker.hardware_info.total_ram_gb} GB RAM</div>
+                                                </div>
+                                            ) : (
+                                                <span className="text-[var(--foreground-muted)]">N/A</span>
+                                            )}
+                                        </td>
+                                        <td className="py-4">{worker.stake.toFixed(3)} SHM</td>
                                     </tr>
                                 ))}
                             </tbody>

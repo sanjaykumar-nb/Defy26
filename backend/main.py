@@ -2,11 +2,68 @@
 V-Inference Backend - Main Application
 Decentralized AI Inference Network with ZKML Verification
 """
+import os
+import sys
+import threading
+import subprocess
+import argparse
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.api import models, inference, marketplace, users
+from app.api import models, inference, marketplace, users, workers, training
+
+# ============ Tunneling Manager ============
+
+class TunnelManager:
+    """Manages SSH reverse tunneling via Serveo.net for the backend"""
+    
+    def __init__(self, port: int = 8000):
+        self.port = port
+        self.public_url = None
+        self.process = None
+        self.is_connected = False
+    
+    def start(self, on_connect_callback=None):
+        """Start the SSH tunnel in a separate thread"""
+        def tunnel_thread():
+            # Command: ssh -R 80:localhost:PORT serveo.net
+            cmd = ["ssh", "-o", "StrictHostKeyChecking=no", "-R", f"80:localhost:{self.port}", "serveo.net"]
+            
+            try:
+                self.process = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1
+                )
+                
+                # Monitor output to find the public URL
+                for line in self.process.stdout:
+                    if "Forwarding HTTP traffic from" in line:
+                        self.public_url = line.split("from")[-1].strip()
+                        self.is_connected = True
+                        print()
+                        print("=" * 60)
+                        print(f"[BACKEND TUNNEL] Global URL: {self.public_url}")
+                        print("=" * 60)
+                        print()
+                        
+                        if on_connect_callback:
+                            on_connect_callback(self.public_url)
+                    
+                    if self.process.poll() is not None:
+                        break
+                        
+            except Exception as e:
+                print(f"[TUNNEL] Error starting tunnel: {e}")
+                self.is_connected = False
+        
+        thread = threading.Thread(target=tunnel_thread, daemon=True)
+        thread.start()
+        print(f"[TUNNEL] Initiating SSH tunnel for backend on port {self.port}...")
 
 
 @asynccontextmanager
@@ -18,9 +75,9 @@ async def lifespan(app: FastAPI):
     print("[SUCCESS] ZKML Simulator ready")
     
     # Seed demo data for presentation
-    from app.core.database import db
-    from app.core.demo_data import seed_demo_data
-    seed_demo_data(db)
+    # from app.core.database import db
+    # from app.core.demo_data import seed_demo_data
+    # seed_demo_data(db)
     
     print("[SUCCESS] Backend ready to accept connections")
     yield
@@ -66,6 +123,8 @@ app.include_router(users.router, prefix="/api")
 app.include_router(models.router, prefix="/api")
 app.include_router(inference.router, prefix="/api")
 app.include_router(marketplace.router, prefix="/api")
+app.include_router(workers.router, prefix="/api")
+app.include_router(training.router, prefix="/api")
 
 
 @app.get("/")
@@ -81,7 +140,8 @@ async def root():
             "users": "/api/users",
             "models": "/api/models",
             "inference": "/api/inference",
-            "marketplace": "/api/marketplace"
+            "marketplace": "/api/marketplace",
+            "workers": "/api/workers"
         }
     }
 
@@ -130,4 +190,13 @@ async def get_platform_stats():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    parser = argparse.ArgumentParser(description="V-Inference Backend")
+    parser.add_argument("--port", type=int, default=8000, help="Local port to run on")
+    parser.add_argument("--tunnel", action="store_true", help="Start a global tunnel via Serveo")
+    args = parser.parse_args()
+
+    if args.tunnel:
+        tunnel = TunnelManager(port=args.port)
+        tunnel.start()
+
+    uvicorn.run(app, host="0.0.0.0", port=args.port)

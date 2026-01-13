@@ -71,9 +71,9 @@ interface Model {
 
 interface Job {
     id: string;
-    model_id: string;
+    model_id?: string;
     status: string;
-    latency_ms: number;
+    latency_ms?: number;
     proof_hash?: string;
     verification_status?: string;
     created_at: string;
@@ -145,8 +145,8 @@ function RecentJobRow({ job, modelName }: { job: Job; modelName: string }) {
     return (
         <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--glass-bg)] hover:bg-[var(--glass-border)] transition-colors">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isVerified ? "bg-[var(--secondary-500)]/20 text-[var(--secondary-400)]" :
-                    isFailed ? "bg-red-500/20 text-red-400" :
-                        "bg-[var(--primary-500)]/20 text-[var(--primary-400)]"
+                isFailed ? "bg-red-500/20 text-red-400" :
+                    "bg-[var(--primary-500)]/20 text-[var(--primary-400)]"
                 }`}>
                 {isVerified ? <CheckIcon /> : isFailed ? <XIcon /> : <BoltIcon />}
             </div>
@@ -226,9 +226,10 @@ export default function DashboardPage() {
     }, []);
 
     // Get model name by ID
-    const getModelName = (modelId: string) => {
+    const getModelName = (modelId?: string) => {
+        if (!modelId) return "Unknown Model";
         const model = recentModels.find(m => m.id === modelId);
-        return model?.name || modelId.slice(0, 12) + "...";
+        return model?.name || (typeof modelId === 'string' ? modelId.slice(0, 12) + "..." : "Unknown Model");
     };
 
     if (loading) {

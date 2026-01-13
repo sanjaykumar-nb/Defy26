@@ -24,6 +24,7 @@ class Database:
         self.listings_file = self.storage_path / "listings.json"
         self.purchases_file = self.storage_path / "purchases.json"
         self.proofs_file = self.storage_path / "proofs.json"
+        self.workers_file = self.storage_path / "workers.json"
         
         # Initialize files if they don't exist
         self._init_file(self.users_file, [])
@@ -32,6 +33,7 @@ class Database:
         self._init_file(self.listings_file, [])
         self._init_file(self.purchases_file, [])
         self._init_file(self.proofs_file, [])
+        self._init_file(self.workers_file, [])
     
     def _init_file(self, file_path: Path, default_data: Any):
         if not file_path.exists():
@@ -134,9 +136,12 @@ class Database:
     # Job operations
     def create_job(self, job_data: Dict) -> Dict:
         jobs = self._read_file(self.jobs_file)
-        job_data['id'] = str(uuid.uuid4())
-        job_data['created_at'] = datetime.utcnow().isoformat()
-        job_data['status'] = 'pending'
+        if 'id' not in job_data:
+            job_data['id'] = str(uuid.uuid4())
+        if 'created_at' not in job_data:
+            job_data['created_at'] = datetime.utcnow().isoformat()
+        if 'status' not in job_data:
+            job_data['status'] = 'pending'
         jobs.append(job_data)
         self._write_file(self.jobs_file, jobs)
         return job_data
