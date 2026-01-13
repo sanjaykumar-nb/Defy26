@@ -18,10 +18,36 @@
 
 **V-OBLIVION** is a next-generation decentralized AI infrastructure. It solves the "Trust Gap" in AI by ensuring that every inference is cryptographically proven (ZKML) and every training shard is processed with mathematical privacy (Differential Privacy), all orchestrated via a high-performance dual-chain architecture.
 
-- **🤖 Verifiable Inference (ZKML)**: Prove that the model you requested actually ran the data you provided.
-- **🏋️ Sharded Training Mesh**: Distribute huge ML jobs across thousands of nodes with automatic reward distribution.
-- **🛡️ Confidential Worker Stats (FHE)**: Use Inco's FHEVM to verify worker quality without exposing sensitive IP or personal performance data.
-- **⛓️ Scalable Settlement (Shardeum)**: Settle thousands of concurrent proofs and transactions with Shardeum's linear scaling.
+- **🤖 Verifiable Inference (ZKML)**: Prove that the model you requested actually ran the data you provided using cryptographic circuits.
+- **🏋️ Sharded Training Mesh**: Distribute massive ML workloads across a global compute fleet with automated shard management and reward distribution.
+- **🛡️ Confidential Worker Reputation (FHE)**: Leveraging Inco's FHEVM to calculate worker quality scores on encrypted data, ensuring fairness without compromising operator privacy.
+- **⛓️ Scalable Settlement (Shardeum)**: Settle thousands of concurrent proof anchors and worker payouts with Shardeum's linear scaling and low-latency finality.
+
+---
+---
+
+## 🧠 Core Concepts
+
+### 1. Verifiable Inference (ZKML)
+In a decentralized network, "Trust but Verify" is the secondary rule. Using **EZKL**, V-OBLIVION converts AI models (ONNX/Scikit-Learn) into cryptographic circuits. 
+- **The Proof**: When a worker executes a model, they generate a **ZK-SNARK proof**.
+- **The Guarantee**: This proof is a mathematical certainty that "Model X was run on Input Y to produce Output Z" without the need to re-run the computation.
+- **On-Chain Anchoring**: The proof hash is anchored on **Shardeum**, providing an immutable audit trail for every single inference.
+
+### 2. Confidential Node Governance (FHEVM)
+Traditional reputation systems expose worker performance publicly, which can be gamed or lead to privacy leaks. 
+- **Encrypted Metrics**: We use **Inco's FHEVM** to process worker metrics (latency, accuracy, uptime) in a fully encrypted state.
+- **Fair Selection**: The system can "blindly" select the best-performing node for a job without ever seeing the raw performance data, ensuring a merit-based mesh that protects its participants.
+
+### 3. Sharded Training & Differential Privacy
+Training a model across the mesh requires distributing sensitive datasets.
+- **Sharding**: Jobs are broken into discrete shards, each processed by a different worker.
+- **DP-SGD Integration**: We implement **Differential Privacy** (via Laplace noise) during the gradient update phase. This ensures that the final model preserves the privacy of individual data points in the training set.
+
+### 4. The "Airbnb for AI" Model
+Just as Airbnb allows homeowners to monetize idle rooms, V-OBLIVION allows gaming enthusiasts and university labs to monetize their idle GPUs. 
+- **Dynamic Marketplace**: Model owners list their models, and workers "rent" their compute power to execute them.
+- **Automated Payouts**: Smart contracts on Shardeum act as trustless escrows, releasing rewards immediately upon successful proof verification.
 
 ---
 📸 Product Journey
