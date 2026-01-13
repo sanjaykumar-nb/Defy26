@@ -29,22 +29,22 @@
 
 <div align="center">
   <h3>Step 1: Model Management</h3>
-  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/1.jpeg" width="800" alt="My Models">
+![1](https://github.com/user-attachments/assets/678c2028-da8a-49cc-89f5-a93012e21b81)
   <p><i>Manage your decentralized AI models with ease.</i></p>
 
   <br>
   <h3>Step 2: Real-time Sharded Inference</h3>
-  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/2.jpeg" width="800" alt="Inference Runner">
+![2](https://github.com/user-attachments/assets/3ce2cfa2-88de-4301-8d03-3d8f85cd278a)
   <p><i>Watch the mesh shard and process your job with cryptographic proof.</i></p>
 
   <br>
   <h3>Step 3: AI Marketplace</h3>
-  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/3.jpeg" width="800" alt="Marketplace">
+![3](https://github.com/user-attachments/assets/ccacbe43-5f67-4770-9155-34ed3038973a)
   <p><i>Monetize your models or buy compute power securely.</i></p>
 
   <br>
   <h3>Step 4: Verifiable History</h3>
-  <img src="file:///e:/downloads/projects/vit/defy/V-Inference-Verifiable-Inference-Network-/4.jpeg" width="800" alt="Execution History">
+![4](https://github.com/user-attachments/assets/5059817c-9d5d-40e4-b837-9cbacb00787f)
   <p><i>Every single job is anchored on Shardeum for immutable auditing.</i></p>
 </div>
 
